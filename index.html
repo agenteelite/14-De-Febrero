@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <audio id="player" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="jardin-rosas"></div>
+
+    <div id="cielo-nocturno">
+        <div class="estrellas"></div>
+        <div class="cometa-animado"></div>
+    </div>
+
+    <div id="cielo-girasoles"></div>
+
+    <div id="intro-screen">
+        <button id="boton-corazon">Presiona Aquí ❤️</button>
+    </div>
+
+    <div id="main-content" class="oculto">
+        <div class="glass-panel">
+            <h1 class="titulo elemento-fade">¡Feliz San Valentín Mi Amor! ❤️</h1>
+            
+            <div class="marco-fotos">
+                <div class="foto-card elemento-fade">
+                    <img src="foto1.jpg" alt="Foto 1" onerror="this.style.display='none'">
+                </div>
+                <div class="foto-card elemento-fade">
+                    <img src="foto2.jpg" alt="Foto 2" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
