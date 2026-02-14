@@ -184,7 +184,27 @@ body {
 
 /* --- BLOQUEO PARA MÓVILES --- */
 @media (max-width: 768px) {
+    /* Forzamos el fondo negro para que no gaste recursos */
+    body {
+        background-color: #050505 !important;
+        background-image: none !important;
+    }
+
+    /* Eliminamos el cielo y estrellas por completo del renderizado */
     #cielo-nocturno {
-        display: none !important; /* Nunca aparecerá en teléfonos */
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    /* Reducimos el desenfoque del panel, que es lo que más pone lento al móvil */
+    .glass-panel {
+        backdrop-filter: blur(2px) !important;
+        background: rgba(0, 0, 0, 0.8) !important; /* Más oscuro para que se lea bien sin blur */
+    }
+
+    /* Reducimos el tamaño de las rosas para que no saturen */
+    .rosa-instancia, #jardin-rosas div {
+        transform: scale(0.4) !important;
     }
 }
