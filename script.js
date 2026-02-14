@@ -27,19 +27,17 @@ document.getElementById('boton-corazon').addEventListener('click', function() {
             
             // --- NUEVO: MOSTRAR CIELO SOLO EN PC ---
             if (window.innerWidth > 768) {
-                document.getElementById('cielo-nocturno').style.opacity = '1';
-            }
-            // ---------------------------------------
-            
-            // 4. INICIAR EFECTO FADING EN CASCADA
-            const elementosAparecer = document.querySelectorAll('.elemento-fade');
-            elementosAparecer.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('aparecer');
-                }, 600 * (index + 1));
-            });
-            
-            // 5. Iniciar la lluvia de girasoles
+        const cielo = document.getElementById('cielo-nocturno');
+        if (cielo) {
+            cielo.style.display = 'block'; // Aseguramos que se vea en PC
+            setTimeout(() => {
+                cielo.style.opacity = '1';
+            }, 10);
+        }
+    } else {
+        // En móvil nos aseguramos que esté muerto
+        document.getElementById('cielo-nocturno').style.display = 'none';
+        }
             iniciarLluviaGirasoles();
         }, 500);
 
@@ -162,4 +160,5 @@ function crearCabezaGirasol(padre) {
         petalo.style.cssText = `width: 12px; height: 30px; background: linear-gradient(to bottom, #ffdb4d, #ffcc00); border-radius: 50% 50% 20% 20%; position: absolute; top: 10px; left: 19px; transform-origin: center 20px; transform: rotate(${i * 36}deg) translateY(-18px); box-shadow: 1px 1px 2px rgba(0,0,0,0.2);`;
         padre.appendChild(petalo);
     }
+
 }
