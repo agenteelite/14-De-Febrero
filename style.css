@@ -1,213 +1,138 @@
 /* RESET Y BASE - ESTRICTO */
+/* --- RESET Y BASE ESTRICTA (Sin ensanchamientos) --- */
 html, body {
-    margin: 0;
-    padding: 0;
-    background-color: #050505;
-    width: 100%;
-    height: 100%;
-    max-width: 100vw; /* Evita que crezca más allá del ancho del dispositivo */
+    margin: 0; padding: 0;
+    background-color: #050505; /* Negro profundo */
+    width: 100vw; height: 100vh;
+    max-width: 100vw; max-height: 100vh;
     overflow: hidden; /* Corta cualquier cosa que intente salir de la pantalla */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overscroll-behavior: none; /* Evita rebotes molestos en móvil */
+    overscroll-behavior: none;
 }
 
 /* --- CAPAS DE FONDO --- */
-#jardin-rosas, #cielo-girasoles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Para que no bloqueen los clics */
-    z-index: 1; /* Capa más baja */
-}
-
-/* --- PANTALLA INTRO (Botón) --- */
-#intro-screen {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; justify-content: center; align-items: center;
-    z-index: 100; /* Por encima de las rosas iniciales */
-    transition: opacity 0.8s ease;
-}
-
-#boton-corazon {
-    padding: 20px 50px;
-    font-size: 1.5rem;
-    background: radial-gradient(circle at 30% 30%, #ff5c8a, #d90429);
-    border: none; border-radius: 50px; color: white;
-    box-shadow: 0 0 30px rgba(217, 4, 41, 0.6);
-    cursor: pointer; transition: transform 0.3s;
-    animation: palpito 1.5s infinite;
-}
-
-#boton-corazon:hover { transform: scale(1.1); }
-
-/* Animación de rotura */
-.romper {
-    animation: estallido 0.6s forwards;
-    pointer-events: none;
-}
-
-@keyframes estallido {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; filter: blur(10px); }
-}
-
-@keyframes palpito {
-    0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }
-}
-
-/* Animación para que las rosas floten suavemente */
-@keyframes flotarRosa {
-    0%, 100% { transform: translateY(0) scale(var(--escala-base, 1)) rotate(0deg); }
-    50% { transform: translateY(-10px) scale(var(--escala-base, 1)) rotate(5deg); }
-}
-
-/* Ajuste al contenedor para que las rosas no tapen el botón */
-#jardin-rosas {
-    z-index: 1; 
-}
-
-#intro-screen {
-    z-index: 10; /* El botón siempre por encima de las rosas */
-}
-/* --- PANTALLA PRINCIPAL (Contenido) --- */
-.oculto { display: none !important; }
-
-#main-content {
-    position: relative;
-    width: 100%; height: 100%;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    z-index: 50; /* Por encima de las rosas, debajo de la intro */
-}
-
-.glass-panel {
-    background: rgba(0, 0, 0, 0.3); /* Fondo semi-transparente */
-    backdrop-filter: blur(3px); /* Desenfoque leve para que se lea el texto */
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-}
-
-.titulo {
-    font-size: 3rem; color: #ffccd5;
-    text-shadow: 0 0 10px #d90429; margin-bottom: 30px;
-}
-
-.marco-fotos { display: flex; gap: 20px; justify-content: center; }
-.foto-card {
-    width: 150px; height: 150px;
-    border: 4px solid white; border-radius: 10px;
-    overflow: hidden; background: #222;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-.foto-card img { width: 100%; height: 100%; object-fit: cover; }
-
-/* --- EFECTO FADING (Aparición Suave) --- */
-/* Estado inicial: invisible y ligeramente desplazado hacia abajo */
-.elemento-fade {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-/* Estado final: visible y en su posición original */
-.elemento-fade.aparecer {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-    .titulo { font-size: 2rem; }
-    .foto-card { width: 110px; height: 110px; }
-}
-/*========================================================================================*/
-/* --- CIELO NOCTURNO (Fondo animado) --- */
+/* z-index: 0 (Cielo), 10 (Rosas), 20 (Girasoles) */
 #cielo-nocturno {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 0; /* ESTO ES CLAVE: va detrás de tus rosas (z-index: 1) */
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
     background: radial-gradient(ellipse at bottom, #002244 0%, #050505 100%);
-    opacity: 0; /* Empieza invisible */
-    transition: opacity 3s ease-in-out; /* Aparición muy suave */
+    opacity: 0; 
+    transition: opacity 3s ease-in-out;
+    pointer-events: none; /* No bloquea clics */
+}
+
+#jardin-rosas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10;
     pointer-events: none;
 }
 
-/* Las estrellas estáticas del fondo */
+#cielo-girasoles {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* --- ESTRELLAS Y COMETA (Solo PC) --- */
 .estrellas {
     width: 100%; height: 100%;
     background-image: 
         radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)),
         radial-gradient(2px 2px at 80px 70px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
         radial-gradient(1px 1px at 150px 150px, #ffffff, rgba(0,0,0,0));
-    background-repeat: repeat; 
-    background-size: 200px 200px; 
-    opacity: 0.5;
+    background-repeat: repeat; background-size: 200px 200px; opacity: 0.5;
 }
 
-/* --- ESTRELLA FUGAZ REALISTA (Izquierda a Derecha) --- */
 .cometa-animado {
-    position: absolute;
-    top: 15%;
-    left: -300px; /* Inicia fuera de la pantalla por la izquierda */
-    width: 350px; /* Largo de la estela */
-    height: 2px;
-    /* El gradiente simula la estela: transparente a la izquierda, blanco a la derecha */
+    position: absolute; top: 15%; left: -300px;
+    width: 350px; height: 2px;
     background: linear-gradient(to right, transparent 0%, rgba(100, 200, 255, 0.2) 30%, rgba(255, 255, 255, 0.8) 80%, #ffffff 100%);
-    transform: rotate(15deg); /* Ángulo de caída */
-    animation: estrellaIzquierdaDerecha 8s linear infinite;
-    animation-delay: 2s;
+    transform: rotate(15deg);
+    animation: estrellaIzquierdaDerecha 8s linear infinite; animation-delay: 2s;
 }
-
-/* La cabeza brillante de la estrella */
 .cometa-animado::after {
-    content: '';
-    position: absolute;
-    right: 0; /* Se ubica en la punta derecha */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px; height: 6px;
-    background: #ffffff;
-    border-radius: 50%;
-    /* Doble sombra para un brillo intenso y realista */
-    box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.9), 
-                0 0 30px 10px rgba(100, 200, 255, 0.6);
+    content: ''; position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%); width: 6px; height: 6px;
+    background: #ffffff; border-radius: 50%;
+    box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.9), 0 0 30px 10px rgba(100, 200, 255, 0.6);
 }
 
 @keyframes estrellaIzquierdaDerecha {
     0% { transform: translateX(0) rotate(15deg); opacity: 0; }
     10% { opacity: 1; }
     70% { opacity: 1; }
-    100% { transform: translateX(130vw) rotate(15deg); opacity: 0; } /* Cruza hacia la derecha */
+    100% { transform: translateX(110vw) rotate(15deg); opacity: 0; }
 }
 
-/* --- BLOQUEO PARA MÓVILES --- */
+/* --- PANTALLA INTRO (Botón Siempre Clickable) --- */
+#intro-screen {
+    position: fixed; inset: 0; /* Cubre toda la pantalla */
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; /* Por encima de TODO */
+    transition: opacity 0.8s ease;
+    pointer-events: none; /* Permite ver las rosas detrás sin bloquear */
+}
+
+#boton-corazon {
+    padding: 20px 50px; font-size: 1.5rem;
+    background: radial-gradient(circle at 30% 30%, #ff5c8a, #d90429);
+    border: none; border-radius: 50px; color: white;
+    box-shadow: 0 0 30px rgba(217, 4, 41, 0.6);
+    cursor: pointer; transition: transform 0.3s;
+    animation: palpito 1.5s infinite;
+    pointer-events: auto; /* Reactiva el clic solo en el botón */
+}
+#boton-corazon:hover { transform: scale(1.1); }
+
+.romper { animation: estallido 0.6s forwards; pointer-events: none; }
+@keyframes estallido {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; filter: blur(10px); }
+}
+@keyframes palpito { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+/* --- ANIMACIÓN ROSAS --- */
+@keyframes flotarRosa {
+    0%, 100% { transform: translateY(0) scale(var(--escala-base, 1)) rotate(0deg); }
+    50% { transform: translateY(-10px) scale(var(--escala-base, 1)) rotate(5deg); }
+}
+
+/* --- PANTALLA PRINCIPAL (Contenido) --- */
+.oculto { display: none !important; }
+
+#main-content {
+    position: relative; width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 50; pointer-events: auto;
+}
+
+.glass-panel {
+    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+    padding: 30px; border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+}
+
+.titulo { font-size: 3rem; color: #ffccd5; text-shadow: 0 0 10px #d90429; margin-bottom: 30px; }
+.marco-fotos { display: flex; gap: 20px; justify-content: center; }
+.foto-card {
+    width: 150px; height: 150px; border: 4px solid white; border-radius: 10px;
+    overflow: hidden; background: #222; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.foto-card img { width: 100%; height: 100%; object-fit: cover; }
+
+.elemento-fade { opacity: 0; transform: translateY(30px); transition: opacity 1s ease-out, transform 1s ease-out; }
+.elemento-fade.aparecer { opacity: 1; transform: translateY(0); }
+
+/* --- RESPONSIVE / MÓVIL ESTRICTO --- */
 @media (max-width: 768px) {
-    /* Forzamos el fondo negro para que no gaste recursos */
-    body {
-        background-color: #050505 !important;
-        background-image: none !important;
-    }
-
-    /* Eliminamos el cielo y estrellas por completo del renderizado */
-    #cielo-nocturno {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-    }
-
-    /* Reducimos el desenfoque del panel, que es lo que más pone lento al móvil */
-    .glass-panel {
-        backdrop-filter: blur(2px) !important;
-        background: rgba(0, 0, 0, 0.8) !important; /* Más oscuro para que se lea bien sin blur */
-    }
-
-    /* Reducimos el tamaño de las rosas para que no saturen */
-    .rosa-instancia, #jardin-rosas div {
-        transform: scale(0.4) !important;
-    }
+    /* Matamos el fondo animado por completo en CSS */
+    #cielo-nocturno { display: none !important; opacity: 0 !important; visibility: hidden !important; }
+    
+    .titulo { font-size: 2rem; }
+    .foto-card { width: 110px; height: 110px; }
+    
+    /* Quitamos el blur pesado para que no haya lag */
+    .glass-panel { backdrop-filter: none !important; background: rgba(0, 0, 0, 0.75); }
 }
+
 
