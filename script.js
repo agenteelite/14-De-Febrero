@@ -95,7 +95,11 @@ function crearJardinRosas() {
 }
 
 function construirRosaProcedural(elemento) {
-    let totalPetalos = 25; 
+    // Si es móvil, dibujamos menos pétalos (15 en lugar de 25)
+    // Se verá casi igual pero irá 2 veces más rápido
+    const esMovil = window.innerWidth < 768;
+    let totalPetalos = esMovil ? 15 : 25; 
+
     for (let i = 0; i < totalPetalos; i++) {
         const petalo = document.createElement('div');
         const angulo = i * 137.5; // Ángulo dorado para espiral natural
@@ -162,3 +166,4 @@ function crearCabezaGirasol(padre) {
     }
 
 }
+
