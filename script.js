@@ -18,31 +18,39 @@ document.getElementById('boton-corazon').addEventListener('click', function() {
     btn.classList.add('romper');
 
     // 3. Transición de pantallas
+    // 3. Transición de pantallas
     setTimeout(() => {
-        introScreen.style.opacity = '0'; // Desvanece el contenedor del botón
+        introScreen.style.opacity = '0'; 
         
         setTimeout(() => {
-            introScreen.style.display = 'none'; // Lo quita del flujo
-            mainContent.classList.remove('oculto'); // Muestra el contenedor principal
+            introScreen.style.display = 'none'; 
+            mainContent.classList.remove('oculto'); 
             
-            // --- NUEVO: MOSTRAR CIELO SOLO EN PC ---
+            // --- SOLUCIÓN DEFINITIVA PARA EL LAG EN MÓVIL ---
+            const cielo = document.getElementById('cielo-nocturno');
             if (window.innerWidth > 768) {
-        const cielo = document.getElementById('cielo-nocturno');
-        if (cielo) {
-            cielo.style.display = 'block'; // Aseguramos que se vea en PC
-            setTimeout(() => {
-                cielo.style.opacity = '1';
-            }, 10);
-        }
-    } else {
-        // En móvil nos aseguramos que esté muerto
-        document.getElementById('cielo-nocturno').style.display = 'none';
-        }
+                // En PC: Mostramos el fondo y la estrella
+                if(cielo) cielo.style.opacity = '1';
+            } else {
+                // En MÓVIL: Eliminamos el cielo del código por completo.
+                // Sin código = Cero Lag = Pantalla negra garantizada.
+                if(cielo) cielo.remove(); 
+            }
+            // ------------------------------------------------
+            
+            // 4. INICIAR EFECTO FADING EN CASCADA
+            const elementosAparecer = document.querySelectorAll('.elemento-fade');
+            elementosAparecer.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('aparecer');
+                }, 600 * (index + 1));
+            });
+            
+            // 5. Iniciar la lluvia de girasoles
             iniciarLluviaGirasoles();
         }, 500);
 
     }, 500);
-});
 
 
 /* --- MODIFICACIÓN NUEVA --- */
@@ -126,7 +134,7 @@ function iniciarLluviaGirasoles() {
     setInterval(() => {
         const girasol = document.createElement('div');
         girasol.style.position = 'absolute';
-        girasol.style.left = Math.random() * 100 + 'vw';
+        girasol.style.left = Math.random() * 90 + 'vw'; // Máximo 90vw para que no toque el borde derecho
         girasol.style.top = '-60px'; // Empieza fuera de la pantalla arriba
         girasol.style.zIndex = 2;
         
@@ -166,4 +174,5 @@ function crearCabezaGirasol(padre) {
     }
 
 }
+
 
