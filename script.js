@@ -1,5 +1,4 @@
 // --- INICIALIZACIÓN ---
-// Generamos las rosas 3D apenas carga la página para que no se vea vacío.
 window.addEventListener('load', () => {
     crearJardinRosas();
 });
@@ -11,14 +10,9 @@ document.getElementById('boton-corazon').addEventListener('click', function() {
     const introScreen = document.getElementById('intro-screen');
     const mainContent = document.getElementById('main-content');
     
-    // 1. Intentar reproducir audio
     audio.play().catch(e => console.warn("Audio bloqueado por navegador hasta interacción"));
-
-    // 2. Romper el botón
     btn.classList.add('romper');
 
-    // 3. Transición de pantallas
-    // 3. Transición de pantallas
     setTimeout(() => {
         introScreen.style.opacity = '0'; 
         
@@ -26,19 +20,17 @@ document.getElementById('boton-corazon').addEventListener('click', function() {
             introScreen.style.display = 'none'; 
             mainContent.classList.remove('oculto'); 
             
-            // --- SOLUCIÓN DEFINITIVA PARA EL LAG EN MÓVIL ---
+            // --- CONTROL DEL CIELO SEGÚN DISPOSITIVO ---
             const cielo = document.getElementById('cielo-nocturno');
             if (window.innerWidth > 768) {
-                // En PC: Mostramos el fondo y la estrella
+                // Es PC: Encendemos el cielo suavemente
                 if(cielo) cielo.style.opacity = '1';
             } else {
-                // En MÓVIL: Eliminamos el cielo del código por completo.
-                // Sin código = Cero Lag = Pantalla negra garantizada.
+                // Es MÓVIL: Destruimos el cielo para cero lag
                 if(cielo) cielo.remove(); 
             }
-            // ------------------------------------------------
             
-            // 4. INICIAR EFECTO FADING EN CASCADA
+            // Efecto Cascada
             const elementosAparecer = document.querySelectorAll('.elemento-fade');
             elementosAparecer.forEach((el, index) => {
                 setTimeout(() => {
@@ -46,75 +38,51 @@ document.getElementById('boton-corazon').addEventListener('click', function() {
                 }, 600 * (index + 1));
             });
             
-            // 5. Iniciar la lluvia de girasoles
             iniciarLluviaGirasoles();
         }, 500);
-
     }, 500);
+});
 
-
-/* --- MODIFICACIÓN NUEVA --- */
-/* --- LÓGICA DE ROSAS 3D (DISTRIBUCIÓN ALEATORIA) --- */
+/* --- LÓGICA DE ROSAS 3D --- */
 function crearJardinRosas() {
     const contenedor = document.getElementById('jardin-rosas');
-    
-    // Detectamos si es un dispositivo móvil (pantalla menor a 768px)
     const esMovil = window.innerWidth < 768;
-
-    // Ajustamos la cantidad: Unas pocas más en móvil para compensar el tamaño pequeño, 
-    // y mantenemos una buena cantidad en PC.
-    const cantidad = esMovil ? 30 : 50; 
+    
+    // Cantidad de rosas
+    const cantidad = esMovil ? 25 : 45; 
 
     for(let i=0; i<cantidad; i++) {
         const rosa = document.createElement('div');
         
-        let tamaño;
-        if (esMovil) {
-            // --- AJUSTE PARA MÓVIL ---
-            // Hacemos las rosas mucho más pequeñas (entre 0.2 y 0.45 de escala)
-            // para que no saturen la pantalla pequeña.
-            tamaño = Math.random() * 0.25 + 0.2; 
-        } else {
-            // --- AJUSTE PARA PC (Original) ---
-            // Mantenemos el tamaño original que te gusta en pantalla grande.
-            tamaño = Math.random() * 0.5 + 0.3; 
-        }
+        // CÁLCULO DE TAMAÑO CORRECTO: 
+        // Móvil = rosas chiquitas y sutiles (0.2 a 0.35) | PC = rosas grandes (0.3 a 0.8)
+        const tamaño = esMovil ? (Math.random() * 0.15 + 0.2) : (Math.random() * 0.5 + 0.3); 
         
         rosa.style.position = 'absolute';
-        // Aplicamos el tamaño calculado según el dispositivo
-        rosa.style.transform = `scale(${tamaño})`;
         rosa.style.zIndex = 1;
 
-        // POSICIONAMIENTO ALEATORIO TOTAL
-        // Usamos hasta el 95% y 90% para evitar que se corten demasiado en los bordes.
-        const posX = Math.random() * 95; 
-        const posY = Math.random() * 90; 
-
-        rosa.style.left = posX + '%';
-        rosa.style.top = posY + '%';
-
-        // Animación suave de flotación
+        // Establecemos la variable de escala para que la animación CSS la lea correctamente
+        rosa.style.setProperty('--escala-base', tamaño);
         rosa.style.animation = `flotarRosa ${Math.random() * 3 + 3}s infinite ease-in-out`;
 
-        // Generar los pétalos 3D
+        // Posiciones máximas al 90% para que nunca empujen la pantalla
+        rosa.style.left = (Math.random() * 90) + '%';
+        rosa.style.top = (Math.random() * 90) + '%';
+
         construirRosaProcedural(rosa);
         contenedor.appendChild(rosa);
     }
 }
 
 function construirRosaProcedural(elemento) {
-    // Si es móvil, dibujamos menos pétalos (15 en lugar de 25)
-    // Se verá casi igual pero irá 2 veces más rápido
-    const esMovil = window.innerWidth < 768;
-    let totalPetalos = esMovil ? 15 : 25; 
-
+    // Restaurados tus 25 pétalos perfectos. El lag ya no existe gracias al control del fondo.
+    let totalPetalos = 25; 
     for (let i = 0; i < totalPetalos; i++) {
         const petalo = document.createElement('div');
-        const angulo = i * 137.5; // Ángulo dorado para espiral natural
+        const angulo = i * 137.5; 
         const radio = 3 + (i * 1.8); 
-        // Gradiente RGBA para profundidad
         const opacidad = 0.85 - (i * 0.015);
-        const colorBase = i % 2 === 0 ? '220, 20, 60' : '180, 0, 40'; // Variación leve de rojo
+        const colorBase = i % 2 === 0 ? '220, 20, 60' : '180, 0, 40'; 
         
         petalo.style.cssText = `
             position: absolute; top: 0; left: 0;
@@ -128,41 +96,37 @@ function construirRosaProcedural(elemento) {
     }
 }
 
-
-/* --- LÓGICA DE LLUVIA DE GIRASOLES (CAÍDA) --- */
+/* --- LÓGICA DE LLUVIA DE GIRASOLES --- */
 function iniciarLluviaGirasoles() {
     setInterval(() => {
         const girasol = document.createElement('div');
         girasol.style.position = 'absolute';
-        girasol.style.left = Math.random() * 90 + 'vw'; // Máximo 90vw para que no toque el borde derecho
-        girasol.style.top = '-60px'; // Empieza fuera de la pantalla arriba
+        // Máximo 90vw para que NO toque el borde derecho de la pantalla y no cause scroll
+        girasol.style.left = Math.random() * 90 + 'vw';
+        girasol.style.top = '-60px'; 
         girasol.style.zIndex = 2;
         
         crearCabezaGirasol(girasol);
         
-        // Velocidad de caída aleatoria
         const duracion = Math.random() * 6 + 6; 
         girasol.style.transition = `top ${duracion}s linear, transform ${duracion}s linear`;
         
         document.getElementById('cielo-girasoles').appendChild(girasol);
 
-        // Forzar el inicio de la animación
         setTimeout(() => {
-            girasol.style.top = '110vh'; // Cae hasta abajo
-            girasol.style.transform = `rotate(${Math.random() * 360 + 180}deg)`; // Rota mientras cae
+            girasol.style.top = '110vh'; 
+            girasol.style.transform = `rotate(${Math.random() * 360 + 180}deg)`; 
         }, 50);
 
-        // Eliminar el elemento al terminar para no saturar la memoria
         setTimeout(() => { girasol.remove() }, duracion * 1000);
-    }, 1000); // Crea uno nuevo cada segundo
+    }, 1200);
 }
 
 function crearCabezaGirasol(padre) {
-    // Escala aleatoria para los girasoles
-    const escala = Math.random() * 0.5 + 0.6;
+    const escala = Math.random() * 0.4 + 0.6;
     padre.style.transform = `scale(${escala})`;
+    padre.style.width = '50px'; padre.style.height = '50px';
 
-    padre.style.width = '50px'; height: '50px';
     const centro = document.createElement('div');
     centro.style.cssText = `width: 22px; height: 22px; background: #4a3020; border-radius: 50%; position: absolute; top: 14px; left: 14px; z-index: 3; box-shadow: inset 0 0 5px #2a1a10;`;
     padre.appendChild(centro);
@@ -172,7 +136,4 @@ function crearCabezaGirasol(padre) {
         petalo.style.cssText = `width: 12px; height: 30px; background: linear-gradient(to bottom, #ffdb4d, #ffcc00); border-radius: 50% 50% 20% 20%; position: absolute; top: 10px; left: 19px; transform-origin: center 20px; transform: rotate(${i * 36}deg) translateY(-18px); box-shadow: 1px 1px 2px rgba(0,0,0,0.2);`;
         padre.appendChild(petalo);
     }
-
 }
-
-
